@@ -1,23 +1,30 @@
-import logo from './logo.svg';
 import './App.css';
+import { Route, Routes } from 'react-router-dom';
+import { Main } from './pages/Main';
+import { FullRecipe } from './pages/FullRecipe';
+import { NotFound } from './pages/NotFound';
+import { useRecipies } from './store';
+import { useEffect } from 'react';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 function App() {
+  const fetchObj = useRecipies((state) => state.fetchRecipies);
+
+  useEffect(() => {
+    fetchObj();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="bg-yellow-200">
+      <Header />
+
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route path="/recipe/:id" element={<FullRecipe />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      <Footer />
     </div>
   );
 }
